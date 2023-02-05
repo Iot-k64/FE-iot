@@ -9,9 +9,9 @@ export default function AppFrame() {
   return (
     <Routes>
       <Route path="/" element={<AdminLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/container" element={<Container />} />
-        <Route path="/product" element={<Product />} />
+        {/* <Route path="login" element={<Login />} /> */}
+        <Route path="container" element={<Container />} />
+        <Route path="product" element={<Product />} />
       </Route>
     </Routes>
   );

@@ -3,7 +3,7 @@ import { Layout, Menu, theme } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 function getItem(label, key, icon, children) {
   return {
@@ -14,8 +14,8 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem('Container', 'container', <PieChartOutlined />),
-  getItem('Product', 'product', <DesktopOutlined />)
+  getItem('Container', 'container', <Link to="/container"><PieChartOutlined /></Link>),
+  getItem('Product', 'product', <Link to="/product"><DesktopOutlined /></Link>)
 ];
 
 export default function AdminLayout() {
