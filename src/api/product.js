@@ -18,7 +18,6 @@ class ProductApi {
     const response = await instanceAxios.post(
       '/update-product-by-id',
       productData,
-      { params: productData.id }
     );
     return response.data;
   }
@@ -26,7 +25,7 @@ class ProductApi {
   static async removeProduct(productId) {
     const response = await instanceAxios.post(
       '/delete-product-by-id',
-      { params: productId }
+      { id: productId }
     );
     return response.data;
   }

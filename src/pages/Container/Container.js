@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Table, Modal as ModalAntd } from 'antd';
+import { Button, Form, Input, InputNumber, Table, Modal as ModalAntd } from 'antd';
 import './Container.css';
 import Modal from '../../components/Modal/Modal';
 import DrawerChart from '../../components/DrawerChart/DrawerChart';
@@ -31,12 +31,12 @@ export default function Container() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const { isLoading, data } = useQuery(['getContainers'], () =>
+  const dataContainer = useQuery(['getContainers'], () =>
     ContainerApi.getContainers()
   );
 
   const createContainer = useMutation(
-    (data) => ContainerApi.createProduct(data),
+    (data) => ContainerApi.createContainer(data),
     {
       onSuccess: () => {
         console.log('success');
@@ -76,11 +76,14 @@ export default function Container() {
   };
 
   const handleOk = (container) => {
-    if (isUpdate) {
-      updateContainer.mutate(container);
-    } else {
-      createContainer.mutate(container);
-    }
+    form.validateFields().then((value) => {
+      if (isUpdate) {
+        console.log(value);
+        updateContainer.mutate(value);
+      } else {
+        createContainer.mutate(value);
+      }
+    })
     setIsModalOpen(false);
   };
 
@@ -98,6 +101,7 @@ export default function Container() {
 
   const handleEditContainer = (record) => {
     form.setFieldsValue(record);
+    setIsUpdate(true);
     setIsModalOpen(true);
   };
 
@@ -111,37 +115,7 @@ export default function Container() {
       }
     });
   };
-  const dataSource = [
-    {
-      id: '1',
-      containerNo: 'Mike',
-      grossWeight: 32,
-      cubicMeter: '10 Downing Street',
-      tareWeight: 13,
-      position: 'Ha Noi',
-      netWeight: 212,
-      recordedTemperature: 10,
-      recordedHumidity: 2
-    },
-    {
-      id: '2',
-      containerNo: 'Mike',
-      grossWeight: 32,
-      cubicMeter: '10 Downing Street',
-      tareWeight: 13,
-      position: 'Ha Noi',
-      netWeight: 212,
-      recordedTemperature: 10,
-      recordedHumidity: 2
-    }
-  ];
-
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id'
-    },
     {
       title: 'Container No',
       dataIndex: 'containerNo',
@@ -186,7 +160,7 @@ export default function Container() {
             >
               Edit
             </Button>
-            <Button onClick={handleDelete}>Delete</Button>
+            <Button onClick={() => handleDelete(record._id)}>Delete</Button>
           </div>
         );
       }
@@ -201,7 +175,7 @@ export default function Container() {
       </div>
 
       <Table
-        dataSource={dataSource}
+        dataSource={dataContainer.data}
         columns={columns}
         onRow={handleClick}
         pagination={false}
@@ -224,23 +198,26 @@ export default function Container() {
           }}
           form={form}
         >
-          <Form.Item label="Container NO" name="containerNo">
+          <Form.Item label="ID" name="_id">
             <Input />
+          </Form.Item>
+          <Form.Item label="Container NO" name="containerNo">
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Gross Weight" name="grossWeight">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Cubic Meter" name="cubicMeter">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Tare Weight" name="tareWeight">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Net Weight" name="netWeight">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Position" name="position">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>

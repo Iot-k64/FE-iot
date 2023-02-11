@@ -26,7 +26,7 @@ class ContainerApi {
   static async removeContainer(containerId) {
     const response = await instanceAxios.post(
       '/delete-container-by-id',
-      { params: containerId }
+      { id: containerId }
     );
     return response.data;
   }

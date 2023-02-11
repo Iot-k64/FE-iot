@@ -1,4 +1,4 @@
-import { Button, Form, Input, Table, Modal as ModalAntd } from 'antd';
+import { Button, Form, Input, InputNumber, Table, Modal as ModalAntd } from 'antd';
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Modal from '../../components/Modal/Modal';
@@ -8,7 +8,7 @@ export default function Product() {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
-  const { isLoading, data } = useQuery(['getProducts'], () =>
+  const dataProducts = useQuery(['getProducts'], () =>
     ProductApi.getProducts()
   );
 
@@ -45,13 +45,15 @@ export default function Product() {
     setIsModalOpen(true);
   };
 
-  const handleOk = (product) => {
-    if (isUpdate) {
-      updateProduct.mutate(product);
-    } else {
-      createProduct.mutate(product);
-    }
-    setIsModalOpen(false);
+  const handleOk = () => {
+    form.validateFields().then((value) => {
+      if (isUpdate) {
+        updateProduct.mutate(value);
+      } else {
+        createProduct.mutate(value);
+      }
+      setIsModalOpen(false);
+    })
   };
 
   const handleCancel = () => {
@@ -91,9 +93,10 @@ export default function Product() {
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id'
+      title: 'STT',
+      render: (text, record, index) => {
+        return index + 1
+      }
     },
     {
       title: 'Name',
@@ -124,7 +127,7 @@ export default function Product() {
             >
               Edit
             </Button>
-            <Button onClick={handleDeleteProduct}>Delete</Button>
+            <Button onClick={() => handleDeleteProduct(record._id)}>Delete</Button>
           </div>
         );
       }
@@ -139,7 +142,7 @@ export default function Product() {
       </div>
 
       <Table
-        dataSource={dataSource}
+        dataSource={dataProducts.data}
         columns={columns}
         pagination={false}
       />
@@ -161,14 +164,17 @@ export default function Product() {
           }}
           form={form}
         >
+          <Form.Item label="ID" name="_id">
+            <Input />
+          </Form.Item>
           <Form.Item label="Name" name="name">
             <Input />
           </Form.Item>
           <Form.Item label="Standard Temperature" name="standardTemp">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Standard Humidity" name="standardHumi">
-            <Input />
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>
