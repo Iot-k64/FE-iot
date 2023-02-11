@@ -1,107 +1,135 @@
-import { Button, Form, Input, Table } from 'antd';
+import { Button, Form, Input, Table, Modal as ModalAntd } from 'antd';
 import React, { useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Modal from '../../components/Modal/Modal';
-
-const dataSource = [
-  {
-    id: '1',
-    containerNo: 'Mike',
-    grossWeight: 32,
-    cubicMeter: '10 Downing Street',
-    tareWeight: 13,
-    position: 'Ha Noi',
-    netWeight: 212,
-    recordedTemperature: 10,
-    recordedHumidity: 2
-  },
-  {
-    id: '2',
-    containerNo: 'Mike',
-    grossWeight: 32,
-    cubicMeter: '10 Downing Street',
-    tareWeight: 13,
-    position: 'Ha Noi',
-    netWeight: 212,
-    recordedTemperature: 10,
-    recordedHumidity: 2
-  }
-];
-
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id'
-  },
-  {
-    title: 'Container No',
-    dataIndex: 'containerNo',
-    key: 'containerNo'
-  },
-  {
-    title: 'Gross Weight (kg)',
-    dataIndex: 'grossWeight',
-    key: 'grossWeight'
-  },
-  {
-    title: 'Cubic Meter (m)',
-    dataIndex: 'cubicMeter',
-    key: 'cubicMeter'
-  },
-  {
-    title: 'Tare Weight (kg)',
-    dataIndex: 'tareWeight',
-    key: 'tareWeight'
-  },
-  {
-    title: 'Net Weight (kg)',
-    dataIndex: 'netWeight',
-    key: 'netWeight'
-  },
-  {
-    title: 'Position',
-    dataIndex: 'position',
-    key: 'position'
-  },
-  {
-    title: 'Recorded Temperature (C°)',
-    dataIndex: 'recordedTemperature',
-    key: 'recordedTemperature'
-  },
-  {
-    title: 'Recorded Humidity',
-    dataIndex: 'recordedHumidity',
-    key: 'recordedHumidity'
-  },
-  {
-    title: 'Action',
-    dataIndex: 'action',
-    key: 'action',
-    render: () => {
-      return (
-        <div style={{ display: 'flex' }}>
-          <Button>Edit</Button>
-          <Button>Delete</Button>
-        </div>
-      );
-    }
-  }
-];
+import ProductApi from '../../api/product';
 
 export default function Product() {
+  const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const { isLoading, data } = useQuery(['getProducts'], () =>
+    ProductApi.getProducts()
+  );
+
+  const createProduct = useMutation(
+    (data) => ProductApi.createProduct(data),
+    {
+      onSuccess: () => {
+        console.log('success');
+      }
+    }
+  );
+
+  const updateProduct = useMutation(
+    (data) => ProductApi.editProduct(data),
+    {
+      onSuccess: () => {
+        console.log('success');
+      }
+    }
+  );
+
+  const removeProduct = useMutation(
+    (data) => ProductApi.removeProduct(data),
+    {
+      onSuccess: () => {
+        console.log('success');
+      }
+    }
+  );
 
   const showModal = () => {
+    form.resetFields();
+    setIsUpdate(false);
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = (product) => {
+    if (isUpdate) {
+      updateProduct.mutate(product);
+    } else {
+      createProduct.mutate(product);
+    }
     setIsModalOpen(false);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const handleEditProduct = (record) => {
+    form.setFieldsValue(record);
+    setIsUpdate(true);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteProduct = (productId) => {
+    ModalAntd.confirm({
+      title: 'Are you sure delete',
+      okText: 'Confirm',
+      cancelText: 'Cancel',
+      onOk: () => {
+        removeProduct.mutate(productId);
+      }
+    });
+  };
+  const dataSource = [
+    {
+      id: '1',
+      name: 'Mike',
+      standardTemp: 19,
+      standardHumi: 2
+    },
+    {
+      id: '2',
+      name: 'Mike',
+      standardTemp: 20,
+      standardHumi: 1
+    }
+  ];
+
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id'
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Standard Temperature (°C)',
+      dataIndex: 'standardTemp',
+      key: 'standardTemp'
+    },
+    {
+      title: 'Standard Humidity (g/m3)',
+      dataIndex: 'standardHumi',
+      key: 'standardHumi'
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      render: (text, record, index) => {
+        return (
+          <div style={{ display: 'flex' }}>
+            <Button
+              onClick={() => {
+                handleEditProduct(record);
+              }}
+            >
+              Edit
+            </Button>
+            <Button onClick={handleDeleteProduct}>Delete</Button>
+          </div>
+        );
+      }
+    }
+  ];
   return (
     <>
       <div className="container-header">
@@ -110,9 +138,13 @@ export default function Product() {
         </Button>
       </div>
 
-      <Table dataSource={dataSource} columns={columns} />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={false}
+      />
       <Modal
-        title="Create container"
+        title="Create product"
         isModalOpen={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -127,38 +159,15 @@ export default function Product() {
           style={{
             maxWidth: 600
           }}
-          initialValues={{
-            remember: true
-          }}
+          form={form}
         >
-          <Form.Item label="Container NO" name="containerNo">
+          <Form.Item label="Name" name="name">
             <Input />
           </Form.Item>
-          <Form.Item label="Gross Weight" name="grossWeight">
+          <Form.Item label="Standard Temperature" name="standardTemp">
             <Input />
           </Form.Item>
-          <Form.Item label="Cubic Meter" name="cubicMeter">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tare Weight" name="tareWeight">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Net Weight" name="netWeight">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Position" name="position">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Recorded Temperature"
-            name="recordedTemperature"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Recorded Humidity"
-            name="recordedHumidity"
-          >
+          <Form.Item label="Standard Humidity" name="standardHumi">
             <Input />
           </Form.Item>
         </Form>
