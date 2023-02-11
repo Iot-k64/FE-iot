@@ -6,13 +6,21 @@ import Product from '../pages/Product/Product';
 import AdminLayout from './AdminLayout';
 
 export default function AppFrame() {
+  const isLogin = localStorage.getItem('isLogin');
+  if (isLogin === null) {
+    localStorage.setItem('isLogin', false);
+  }
+  console.log(isLogin);
   return (
     <Routes>
-      <Route path="/" element={<AdminLayout />}>
-        {/* <Route path="login" element={<Login />} /> */}
-        <Route path="container" element={<Container />} />
-        <Route path="product" element={<Product />} />
-      </Route>
+      {!isLogin ? (
+        <Route path="/" element={<AdminLayout />}>
+          <Route path="container" element={<Container />} />
+          <Route path="product" element={<Product />} />
+        </Route>
+      ) : (
+        <Route path="/" element={<Login />} />
+      )}
     </Routes>
   );
 }
