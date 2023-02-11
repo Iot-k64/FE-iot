@@ -4,8 +4,11 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
+    "@tanstack/react-query": "^4.24.4",
     "antd": "^5.1.2",
     "axios": "^0.21.4",
+    "highcharts": "^10.3.3",
+    "highcharts-react-official": "^3.1.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,12 +26,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
