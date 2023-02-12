@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, InputNumber, Table, Modal as ModalAntd } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Table,
+  Modal as ModalAntd,
+  Select,
+  Spin
+} from 'antd';
 import './Container.css';
 import Modal from '../../components/Modal/Modal';
 import DrawerChart from '../../components/DrawerChart/DrawerChart';
 import ContainerApi from '../../api/container';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query';
+import ProductApi from '../../api/product';
 
 const dataTemper = [
   {
@@ -31,15 +45,30 @@ export default function Container() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const dataContainer = useQuery(['getContainers'], () =>
-    ContainerApi.getContainers()
+  const dataContainer = useQuery(
+    ['getContainers'],
+    () => ContainerApi.getContainers(),
+    {
+      keepPreviousData: true
+    }
   );
+
+  const dataProducts = useQuery(
+    ['getProducts'],
+    () => ProductApi.getProducts(),
+    {
+      keepPreviousData: true
+    }
+  );
+
+  const queryClient = useQueryClient();
 
   const createContainer = useMutation(
     (data) => ContainerApi.createContainer(data),
     {
       onSuccess: () => {
         console.log('success');
+        queryClient.invalidateQueries('getAllQuestion');
       }
     }
   );
@@ -49,6 +78,7 @@ export default function Container() {
     {
       onSuccess: () => {
         console.log('success');
+        queryClient.invalidateQueries('getAllQuestion');
       }
     }
   );
@@ -58,6 +88,7 @@ export default function Container() {
     {
       onSuccess: () => {
         console.log('success');
+        queryClient.invalidateQueries('getAllQuestion');
       }
     }
   );
@@ -83,7 +114,7 @@ export default function Container() {
       } else {
         createContainer.mutate(value);
       }
-    })
+    });
     setIsModalOpen(false);
   };
 
@@ -147,6 +178,12 @@ export default function Container() {
       key: 'position'
     },
     {
+      title: 'Product',
+      dataIndex: 'product',
+      key: 'product'
+    },
+    ,
+    {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
@@ -160,14 +197,19 @@ export default function Container() {
             >
               Edit
             </Button>
-            <Button onClick={() => handleDelete(record._id)}>Delete</Button>
+            <Button onClick={() => handleDelete(record._id)}>
+              Delete
+            </Button>
           </div>
         );
       }
     }
   ];
+
   return (
-    <>
+    <Spin
+      spinning={dataContainer.isLoading || dataProducts.isLoading}
+    >
       <div className="container-header">
         <Button type="primary" onClick={showModal}>
           Create
@@ -219,6 +261,18 @@ export default function Container() {
           <Form.Item label="Position" name="position">
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
+          <Form.Item label="Product" name="product">
+            <Select
+              options={
+                dataProducts.data
+                  ? dataProducts.data.map((item) => ({
+                      label: item.name,
+                      value: item._id
+                    }))
+                  : []
+              }
+            />
+          </Form.Item>
         </Form>
       </Modal>
       {open && (
@@ -229,6 +283,6 @@ export default function Container() {
           dataTemper={dataTemper}
         />
       )}
-    </>
+    </Spin>
   );
 }

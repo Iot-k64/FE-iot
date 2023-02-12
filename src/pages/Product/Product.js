@@ -1,6 +1,17 @@
-import { Button, Form, Input, InputNumber, Table, Modal as ModalAntd } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Table,
+  Modal as ModalAntd
+} from 'antd';
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query';
 import Modal from '../../components/Modal/Modal';
 import ProductApi from '../../api/product';
 
@@ -12,11 +23,14 @@ export default function Product() {
     ProductApi.getProducts()
   );
 
+  const queryClient = useQueryClient();
+
   const createProduct = useMutation(
     (data) => ProductApi.createProduct(data),
     {
       onSuccess: () => {
         console.log('success');
+        queryClient.invalidateQueries('getProducts');
       }
     }
   );
@@ -26,6 +40,7 @@ export default function Product() {
     {
       onSuccess: () => {
         console.log('success');
+        queryClient.invalidateQueries('getProducts');
       }
     }
   );
@@ -35,6 +50,7 @@ export default function Product() {
     {
       onSuccess: () => {
         console.log('success');
+        queryClient.invalidateQueries('getProducts');
       }
     }
   );
@@ -53,7 +69,7 @@ export default function Product() {
         createProduct.mutate(value);
       }
       setIsModalOpen(false);
-    })
+    });
   };
 
   const handleCancel = () => {
@@ -95,7 +111,7 @@ export default function Product() {
     {
       title: 'STT',
       render: (text, record, index) => {
-        return index + 1
+        return index + 1;
       }
     },
     {
@@ -114,6 +130,16 @@ export default function Product() {
       key: 'standardHumi'
     },
     {
+      title: 'Maximum Deviation Temperature',
+      dataIndex: 'maxDeviationTemp',
+      key: 'maxDeviationTemp'
+    },
+    {
+      title: 'Maximum Deviation Humidity',
+      dataIndex: 'maxDeviationHumi',
+      key: 'maxDeviationHumi'
+    },
+    {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
@@ -127,7 +153,9 @@ export default function Product() {
             >
               Edit
             </Button>
-            <Button onClick={() => handleDeleteProduct(record._id)}>Delete</Button>
+            <Button onClick={() => handleDeleteProduct(record._id)}>
+              Delete
+            </Button>
           </div>
         );
       }
@@ -174,6 +202,18 @@ export default function Product() {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Standard Humidity" name="standardHumi">
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            label="'Maximum Deviation Temperature"
+            name="maxDeviationTemp"
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            label="Maximum Deviation Humidity"
+            name="maxDeviationHumi"
+          >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Form>

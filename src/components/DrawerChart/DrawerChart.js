@@ -1,4 +1,4 @@
-import { Drawer } from 'antd';
+import { Button, Drawer, message } from 'antd';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
 import React from 'react';
@@ -10,6 +10,11 @@ export default function DrawerChart({
   dataHumi,
   dataContainer
 }) {
+  const handleTroubleshooting = () => {
+    setTimeout(() => {
+      message.success('Successful adjustment');
+    }, 3000);
+  };
   return (
     <Drawer
       title="Basic Drawer"
@@ -79,6 +84,9 @@ export default function DrawerChart({
           }
         }}
       />
+      <Button onClick={handleTroubleshooting} danger>
+        Troubleshoot
+      </Button>
       <HighchartsReact
         highcharts={Highcharts}
         options={{
@@ -140,6 +148,9 @@ export default function DrawerChart({
           }
         }}
       />
+      <Button onClick={handleTroubleshooting} danger>
+        Troubleshoot
+      </Button>
     </Drawer>
   );
 }
