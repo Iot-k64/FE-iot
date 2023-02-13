@@ -1,7 +1,12 @@
+import {
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query';
 import { Button, Drawer, message } from 'antd';
-import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import React from 'react';
+import TrackRecord from '../../api/trackRecord';
 
 export default function DrawerChart({
   showDrawer,
@@ -10,6 +15,16 @@ export default function DrawerChart({
   dataHumi,
   dataContainer
 }) {
+  const dataTrackRecords = useQuery(
+    ['getTrackRecords'],
+    () => TrackRecord.getTrackRecord(dataContainer._id),
+    {
+      keepPreviousData: true
+    }
+  );
+  const queryClient = useQueryClient();
+
+  console.log(dataTrackRecords.data)
   const handleTroubleshooting = () => {
     setTimeout(() => {
       message.success('Successful adjustment');

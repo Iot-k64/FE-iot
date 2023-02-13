@@ -44,10 +44,11 @@ export default function Container() {
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [status, setStatus] = useState(1);
 
   const dataContainer = useQuery(
     ['getContainers'],
-    () => ContainerApi.getContainers(),
+    () => ContainerApi.getContainers(status),
     {
       keepPreviousData: true
     }
@@ -131,7 +132,7 @@ export default function Container() {
   };
 
   const handleEditContainer = (record) => {
-    form.setFieldsValue(record);
+    form.setFieldsValue({ ...record, product: record.product._id });
     setIsUpdate(true);
     setIsModalOpen(true);
   };
@@ -180,7 +181,10 @@ export default function Container() {
     {
       title: 'Product',
       dataIndex: 'product',
-      key: 'product'
+      key: 'product',
+      render: (text, record, index) => {
+        return record.product.name
+      }
     },
     ,
     {
@@ -214,10 +218,25 @@ export default function Container() {
         <Button type="primary" onClick={showModal}>
           Create
         </Button>
+        <Select
+          options={[
+            {
+              label: "Đang hoạt động",
+              value: 1
+            }, {
+              label: "Không hoạt động",
+              value: 0
+            }
+          ]}
+          defaultValue={1}
+          onChange={(value) => {
+            setStatus(value);
+          }}
+        />
       </div>
 
       <Table
-        dataSource={dataContainer.data}
+        dataSource={dataContainer.data?.map((item, index) => ({ ...item, key: index }))}
         columns={columns}
         onRow={handleClick}
         pagination={false}
@@ -240,7 +259,7 @@ export default function Container() {
           }}
           form={form}
         >
-          <Form.Item label="ID" name="_id">
+          <Form.Item label="ID" name="_id" hidden={true}>
             <Input />
           </Form.Item>
           <Form.Item label="Container NO" name="containerNo">
@@ -259,16 +278,16 @@ export default function Container() {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Position" name="position">
-            <InputNumber style={{ width: '100%' }} />
+            <Input style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item label="Product" name="product">
             <Select
               options={
                 dataProducts.data
                   ? dataProducts.data.map((item) => ({
-                      label: item.name,
-                      value: item._id
-                    }))
+                    label: item.name,
+                    value: item._id
+                  }))
                   : []
               }
             />

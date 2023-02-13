@@ -1,5 +1,6 @@
 .container-header {
   display: flex;
   flex-direction: row-reverse;
-  margin: 30px ;
+  margin: 30px;
+  justify-content: space-between;
 }

@@ -1,8 +1,8 @@
 import instanceAxios from './base';
 
 class ContainerApi {
-  static async getContainers() {
-    const response = await instanceAxios.post('/get-all-containers');
+  static async getContainers(status) {
+    const response = await instanceAxios.post('/get-all-containers', { status });
     return response.data;
   }
 

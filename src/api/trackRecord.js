@@ -1,15 +1,15 @@
 import instanceAxios from './base';
 
-class trackRecord {
+class TrackRecord {
   static async getTrackRecord(containerId) {
     const response = await instanceAxios.get(
       '/get-all-track-records',
       {
-        id: containerId
+        containerId: containerId
       }
     );
     return response.data;
   }
 }
 
-export default trackRecord;
+export default TrackRecord;

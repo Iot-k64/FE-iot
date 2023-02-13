@@ -192,7 +192,7 @@ export default function Product() {
           }}
           form={form}
         >
-          <Form.Item label="ID" name="_id">
+          <Form.Item label="ID" name="_id" hidden={true}>
             <Input />
           </Form.Item>
           <Form.Item label="Name" name="name">
