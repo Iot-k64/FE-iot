@@ -20,24 +20,6 @@ import {
 } from '@tanstack/react-query';
 import ProductApi from '../../api/product';
 
-const dataTemper = [
-  {
-    name: 'Installation & Developers',
-    data: [
-      43934,
-      48656,
-      65165,
-      81827,
-      112143,
-      142383,
-      171533,
-      165174,
-      155157,
-      161454,
-      154610
-    ]
-  }
-];
 
 export default function Container() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +27,7 @@ export default function Container() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [status, setStatus] = useState(1);
+  const [dataContainerDetail, setDataContainerDetail] = useState()
 
   const dataContainer = useQuery(
     ['getContainers'],
@@ -123,10 +106,11 @@ export default function Container() {
     setIsModalOpen(false);
   };
 
-  const handleClick = ({ record, rowIndex }) => {
+  const handleClick = (record) => {
     return {
       onDoubleClick: (event) => {
         showDrawer();
+        setDataContainerDetail(record);
       }
     };
   };
@@ -183,7 +167,7 @@ export default function Container() {
       dataIndex: 'product',
       key: 'product',
       render: (text, record, index) => {
-        return record.product.name
+        return record.product?.name
       }
     },
     ,
@@ -294,12 +278,11 @@ export default function Container() {
           </Form.Item>
         </Form>
       </Modal>
-      {open && (
+      {(open && !!dataContainerDetail) && (
         <DrawerChart
           closeDrawer={onClose}
           showDrawer={open}
-          dataHumi={dataTemper}
-          dataTemper={dataTemper}
+          dataContainer={dataContainerDetail}
         />
       )}
     </Spin>

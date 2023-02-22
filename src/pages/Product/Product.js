@@ -170,7 +170,7 @@ export default function Product() {
       </div>
 
       <Table
-        dataSource={dataProducts.data}
+        dataSource={dataProducts.data?.map((item, index) => ({...item, key: index}))}
         columns={columns}
         pagination={false}
       />
