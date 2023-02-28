@@ -1,4 +1,4 @@
-import { DesktopOutlined, PieChartOutlined } from '@ant-design/icons';
+import { DashboardOutlined, DesktopOutlined, InboxOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
@@ -14,8 +14,27 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem('Container', 'container', <Link to="/container"><PieChartOutlined /></Link>),
-  getItem('Product', 'product', <Link to="/product"><DesktopOutlined /></Link>)
+  getItem(
+    'Dashboard',
+    'dashboard',
+    <Link to="/dashboard">
+      <DashboardOutlined />{' '}
+    </Link>
+  ),
+  getItem(
+    'Container',
+    'container',
+    <Link to="/container">
+      <InboxOutlined />
+    </Link>
+  ),
+  getItem(
+    'Product',
+    'product',
+    <Link to="/product">
+      <DesktopOutlined />
+    </Link>
+  )
 ];
 
 export default function AdminLayout() {
