@@ -1,4 +1,4 @@
-import { DesktopOutlined, LogoutOutlined, PieChartOutlined } from '@ant-design/icons';
+import { DashboardOutlined, DesktopOutlined, InboxOutlined, PieChartOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
