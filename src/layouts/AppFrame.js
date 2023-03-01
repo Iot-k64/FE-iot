@@ -6,11 +6,10 @@ import Product from '../pages/Product/Product';
 import AdminLayout from './AdminLayout';
 
 export default function AppFrame() {
-  const isLogin = localStorage.getItem('isLogin');
-  if (isLogin === null) {
+  const isLogin = JSON.parse(localStorage.getItem('isLogin'));
+  if (!isLogin) {
     localStorage.setItem('isLogin', false);
   }
-  console.log(isLogin);
   return (
     <Routes>
       {isLogin ? (

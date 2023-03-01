@@ -1,9 +1,18 @@
 import { Button, Form, Input } from 'antd';
 import React from 'react';
 import './Login.css';
+import { accounts } from '../../accounts';
 
 export default function Login() {
-  return (
+  const [form] = Form.useForm();
+  const handleLogin = (value) => {
+    const checkAcc =  accounts.find(account => account.username === value.username && account.pass === value.password);
+    if (checkAcc) {
+      localStorage.setItem('isLogin', "true");
+      window.location.reload();
+    }
+  }
+    return (
     <div className="login-page">
       <div className="login-box">
         <div className="illustration-wrapper">
@@ -12,7 +21,9 @@ export default function Login() {
             alt="Login"
           />
         </div>
-        <Form name="login-form">
+        <Form name="login-form" form={form}
+        onFinish={handleLogin}
+        >
           <p className="form-title">Welcome back</p>
           <Form.Item
             name="username"
