@@ -11,7 +11,6 @@ export default function DrawerChart({
   closeDrawer,
   dataContainer
 }) {
-  const [dataTemp, setDateTemp] = useState([]);
   const dataTrackRecords = useQuery(
     ['getTrackRecords', dataContainer._id],
     () => TrackRecord.getTrackRecord(dataContainer._id),
