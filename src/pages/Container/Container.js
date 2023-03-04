@@ -26,6 +26,7 @@ export default function Container() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [status, setStatus] = useState(1);
+  const [statusActice, setStatusActive] = useState(2);
   const [dataContainerDetail, setDataContainerDetail] = useState();
 
   const dataContainer = useQuery(
@@ -201,22 +202,44 @@ export default function Container() {
         <Button type="primary" onClick={showModal}>
           Create
         </Button>
-        <Select
-          options={[
-            {
-              label: 'Đang hoạt động',
-              value: 1
-            },
-            {
-              label: 'Không hoạt động',
-              value: 0
-            }
-          ]}
-          defaultValue={1}
-          onChange={(value) => {
-            setStatus(value);
-          }}
-        />
+        <div>
+          <Select
+            options={[
+              {
+                label: 'Active',
+                value: 1
+              },
+              {
+                label: 'Inactive',
+                value: 0
+              }
+            ]}
+            defaultValue={1}
+            size="large"
+            onChange={(value) => {
+              setStatus(value);
+            }}
+          />
+          {status === 1 && (
+            <Select
+              size="large"
+              options={[
+                {
+                  label: 'Safe',
+                  value: 2
+                },
+                {
+                  label: 'Warning',
+                  value: 3
+                }
+              ]}
+              defaultValue={2}
+              onChange={(value) => {
+                setStatusActive(value);
+              }}
+            />
+          )}
+        </div>
       </div>
 
       <Table

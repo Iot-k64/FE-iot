@@ -1,5 +1,6 @@
 import { Card, Col, Row } from 'antd';
 import React from 'react';
+import './Dashboard.css';
 
 export default function Dashboard() {
   return (
@@ -12,8 +13,8 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#2AA2B8', color: '#fff' }}
           >
-            <h1>80</h1>
-            <h4>Số lượng xe đang hoạt động</h4>
+            <div className="large-text">80</div>
+            <h4>Number of truck is active</h4>
           </Card>
         </Col>
         <Col span={6}>
@@ -22,7 +23,8 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#FBC108', color: '#000' }}
           >
-            Card content
+            <div className="large-text">80</div>
+            <h4>Number of truck is warning</h4>
           </Card>
         </Col>
         <Col span={6}>
@@ -31,7 +33,8 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#DC3545', color: '#fff' }}
           >
-            Card content
+            <div className="large-text">80</div>
+            <h4>Number of truck is inactive</h4>
           </Card>
         </Col>
         <Col span={6}>
@@ -40,7 +43,8 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#28A745', color: '#fff' }}
           >
-            Card content
+            <div className="large-text">80</div>
+            <h4>Number of truck is safe</h4>
           </Card>
         </Col>
       </Row>
