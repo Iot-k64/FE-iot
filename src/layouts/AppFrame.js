@@ -15,7 +15,7 @@ export default function AppFrame() {
     <Routes>
       {isLogin ? (
         <Route path="/" element={<AdminLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="container" element={<Container />} />
           <Route path="product" element={<Product />} />
         </Route>

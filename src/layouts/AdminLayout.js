@@ -4,6 +4,7 @@ import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import Dashboard from '../pages/Dashboard/Dashboard';
 
 
 export default function AdminLayout() {
@@ -62,6 +63,7 @@ export default function AdminLayout() {
           style={{ padding: 0, background: colorBgContainer }}
         />
         <Content style={{ margin: '0 16px' }}>
+          <Dashboard />
           <Outlet />
         </Content>
       </Layout>

@@ -12,7 +12,8 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#2AA2B8', color: '#fff' }}
           >
-            Card content
+            <h1>80</h1>
+            <h4>Số lượng xe đang hoạt động</h4>
           </Card>
         </Col>
         <Col span={6}>
