@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Drawer, message, Spin } from 'antd';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import React, { useState } from 'react';
+import React from 'react';
 import TrackRecord from '../../api/trackRecord';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -35,7 +35,9 @@ export default function DrawerChart({
           name: 'Standard temperature',
           data:
             !dataTrackRecords.isLoading &&
-            dataTrackRecords.data.map((item) => 30)
+            dataTrackRecords.data.map(
+              () => dataContainer.product.standardTemp
+            )
         }
       ];
     } else {
@@ -52,7 +54,9 @@ export default function DrawerChart({
           name: 'Standard humidity',
           data:
             !dataTrackRecords.isLoading &&
-            dataTrackRecords.data.map((item) => 25)
+            dataTrackRecords.data.map(
+              () => dataContainer.product.standardHumi
+            )
         }
       ];
     }
