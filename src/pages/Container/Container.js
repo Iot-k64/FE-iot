@@ -26,12 +26,15 @@ export default function Container() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [status, setStatus] = useState(1);
-  const [statusActice, setStatusActive] = useState(2);
+  const [statusActive, setStatusActive] = useState(2);
   const [dataContainerDetail, setDataContainerDetail] = useState();
 
   const dataContainer = useQuery(
-    ['getContainers', status],
-    () => ContainerApi.getContainers(status),
+    ['getContainers', status, statusActive],
+    () =>
+      ContainerApi.getContainers(
+        status === 1 ? statusActive : status
+      ),
     {
       keepPreviousData: true
     }
