@@ -2,8 +2,12 @@ import instanceAxios from './base';
 
 class ContainerApi {
   static async getContainers(status) {
-    const response = await instanceAxios.post('/get-all-containers', { status });
-    return response.data;
+    if(status){
+      const response = await instanceAxios.post('/get-all-containers', { status });
+      return response.data;
+    }
+    const response = await instanceAxios.post('/get-all-containers');
+      return response.data;
   }
 
   static async createContainer(containerData) {

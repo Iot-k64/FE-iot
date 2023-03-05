@@ -20,7 +20,6 @@ export default function DrawerChart({
     }
   );
   const queryClient = useQueryClient();
-  console.log(dataTemp);
   const getDataHighChart = (isTemp) => {
     if (isTemp) {
       return [
