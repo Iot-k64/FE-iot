@@ -26,15 +26,11 @@ export default function Container() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [status, setStatus] = useState(1);
-  const [statusActive, setStatusActive] = useState(2);
   const [dataContainerDetail, setDataContainerDetail] = useState();
 
   const dataContainer = useQuery(
-    ['getContainers', status, statusActive],
-    () =>
-      ContainerApi.getContainers(
-        status === 1 ? statusActive : status
-      ),
+    ['getContainers', status],
+    () => ContainerApi.getContainers(status),
     {
       keepPreviousData: true
     }
@@ -196,7 +192,6 @@ export default function Container() {
       }
     }
   ];
-
   return (
     <Spin
       spinning={dataContainer.isLoading || dataProducts.isLoading}
@@ -209,12 +204,20 @@ export default function Container() {
           <Select
             options={[
               {
+                label: 'Inactive',
+                value: 4
+              },
+              {
                 label: 'Active',
                 value: 1
               },
               {
-                label: 'Inactive',
-                value: 0
+                label: 'Safe',
+                value: 2
+              },
+              {
+                label: 'Warning',
+                value: 3
               }
             ]}
             defaultValue={1}
@@ -223,25 +226,6 @@ export default function Container() {
               setStatus(value);
             }}
           />
-          {status === 1 && (
-            <Select
-              size="large"
-              options={[
-                {
-                  label: 'Safe',
-                  value: 2
-                },
-                {
-                  label: 'Warning',
-                  value: 3
-                }
-              ]}
-              defaultValue={2}
-              onChange={(value) => {
-                setStatusActive(value);
-              }}
-            />
-          )}
         </div>
       </div>
 
