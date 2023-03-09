@@ -1,20 +1,21 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Container from '../pages/Container/Container';
+import Dashboard from '../pages/Dashboard/Dashboard';
 import Login from '../pages/Login/Login';
 import Product from '../pages/Product/Product';
 import AdminLayout from './AdminLayout';
 
 export default function AppFrame() {
-  const isLogin = localStorage.getItem('isLogin');
-  if (isLogin === null) {
+  const isLogin = JSON.parse(localStorage.getItem('isLogin'));
+  if (!isLogin) {
     localStorage.setItem('isLogin', false);
   }
-  console.log(isLogin);
   return (
     <Routes>
       {isLogin ? (
         <Route path="/" element={<AdminLayout />}>
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="container" element={<Container />} />
           <Route path="product" element={<Product />} />
         </Route>

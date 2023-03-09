@@ -20,17 +20,16 @@ import {
 } from '@tanstack/react-query';
 import ProductApi from '../../api/product';
 
-
 export default function Container() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [status, setStatus] = useState(1);
-  const [dataContainerDetail, setDataContainerDetail] = useState()
+  const [dataContainerDetail, setDataContainerDetail] = useState();
 
   const dataContainer = useQuery(
-    ['getContainers'],
+    ['getContainers', status],
     () => ContainerApi.getContainers(status),
     {
       keepPreviousData: true
@@ -167,7 +166,7 @@ export default function Container() {
       dataIndex: 'product',
       key: 'product',
       render: (text, record, index) => {
-        return record.product?.name
+        return record.product?.name;
       }
     },
     ,
@@ -193,7 +192,6 @@ export default function Container() {
       }
     }
   ];
-
   return (
     <Spin
       spinning={dataContainer.isLoading || dataProducts.isLoading}
@@ -202,25 +200,40 @@ export default function Container() {
         <Button type="primary" onClick={showModal}>
           Create
         </Button>
-        <Select
-          options={[
-            {
-              label: "Đang hoạt động",
-              value: 1
-            }, {
-              label: "Không hoạt động",
-              value: 0
-            }
-          ]}
-          defaultValue={1}
-          onChange={(value) => {
-            setStatus(value);
-          }}
-        />
+        <div>
+          <Select
+            options={[
+              {
+                label: 'Inactive',
+                value: 4
+              },
+              {
+                label: 'Active',
+                value: 1
+              },
+              {
+                label: 'Safe',
+                value: 2
+              },
+              {
+                label: 'Warning',
+                value: 3
+              }
+            ]}
+            defaultValue={1}
+            size="large"
+            onChange={(value) => {
+              setStatus(value);
+            }}
+          />
+        </div>
       </div>
 
       <Table
-        dataSource={dataContainer.data?.map((item, index) => ({ ...item, key: index }))}
+        dataSource={dataContainer.data?.map((item, index) => ({
+          ...item,
+          key: index
+        }))}
         columns={columns}
         onRow={handleClick}
         pagination={false}
@@ -269,16 +282,16 @@ export default function Container() {
               options={
                 dataProducts.data
                   ? dataProducts.data.map((item) => ({
-                    label: item.name,
-                    value: item._id
-                  }))
+                      label: item.name,
+                      value: item._id
+                    }))
                   : []
               }
             />
           </Form.Item>
         </Form>
       </Modal>
-      {(open && !!dataContainerDetail) && (
+      {open && !!dataContainerDetail && (
         <DrawerChart
           closeDrawer={onClose}
           showDrawer={open}
