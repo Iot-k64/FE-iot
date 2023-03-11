@@ -5,6 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import React from 'react';
 import TrackRecord from '../../api/trackRecord';
 import { LoadingOutlined } from '@ant-design/icons';
+import { sendNotif } from '../../api/sendNotif';
 
 export default function DrawerChart({
   showDrawer,
@@ -62,6 +63,7 @@ export default function DrawerChart({
     }
   };
   const handleTroubleshooting = () => {
+    sendNotif(`WARNING: Điều chỉnh lại các thông số của contaner ${dataContainer?.containerNo}!!!`)
     setTimeout(() => {
       message.success('Successful adjustment');
     }, 3000);
