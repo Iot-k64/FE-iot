@@ -26,7 +26,7 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#2AA2B8', color: '#fff' }}
           >
-            <div className="large-text">{dataContainer.data?.filter(item => item.status === 1).length || 0}</div>
+            <div className="large-text">{dataContainer.data?.filter(item => (item.status === 1 || item.status === 2 || item.status === 3)).length || 0}</div>
             <h4>Number of truck is active</h4>
           </Card>
         </Col>
@@ -46,7 +46,7 @@ export default function Dashboard() {
             hoverable
             style={{ backgroundColor: '#DC3545', color: '#fff' }}
           >
-            <div className="large-text">{dataContainer.data?.filter(item => item.status === 0).length || 0}</div>
+            <div className="large-text">{dataContainer.data?.filter(item => item.status === 4).length || 0}</div>
             <h4>Number of truck is inactive</h4>
           </Card>
         </Col>
